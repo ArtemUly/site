@@ -1,5 +1,6 @@
 /* ============================================================
    Страница вопроса: рассказ + варианты ответа ИЛИ слайдер
+   ИЛИ убегающая кнопка
    ============================================================ */
 (function () {
   "use strict";
@@ -21,6 +22,9 @@
     sliderBlock: document.getElementById("slider-block"),
     slider: document.getElementById("slider"),
     sliderValue: document.getElementById("slider-value"),
+    escapeBlock: document.getElementById("escape-block"),
+    escapeStay: document.getElementById("escape-stay"),
+    escapeRun: document.getElementById("escape-run"),
     modal: document.getElementById("modal"),
     modalClose: document.getElementById("modal-close"),
   };
@@ -34,6 +38,12 @@
     location.href = "reveal.html?q=" + (index + 1);
   }
 
+  function hideAll() {
+    els.options.hidden = true;
+    els.sliderBlock.hidden = true;
+    els.escapeBlock.hidden = true;
+  }
+
   /* ---------- слайдер ---------- */
   function renderSlider() {
     const cfgSlider = q.slider || {};
@@ -41,7 +51,7 @@
     const max = cfgSlider.max != null ? cfgSlider.max : 100;
     const target = cfgSlider.target != null ? cfgSlider.target : max;
 
-    els.options.hidden = true;
+    hideAll();
     els.sliderBlock.hidden = false;
     els.slider.min = min;
     els.slider.max = max;
@@ -60,7 +70,7 @@
 
   /* ---------- варианты ответа ---------- */
   function renderOptions() {
-    els.sliderBlock.hidden = true;
+    hideAll();
     q.options.forEach(function (text, i) {
       const btn = document.createElement("button");
       btn.className = "option";
@@ -79,8 +89,62 @@
     });
   }
 
+  /* ---------- убегающая кнопка ---------- */
+  function renderEscape() {
+    hideAll();
+    els.escapeBlock.hidden = false;
+
+    const buttons = [els.escapeStay, els.escapeRun];
+
+    buttons.forEach(function (btn, i) {
+      btn.textContent = q.options[i];
+      if (i === q.correct) {
+        btn.addEventListener("click", goNext);
+      } else {
+        makeEscape(btn);
+      }
+    });
+  }
+
+  function makeEscape(btn) {
+    let x = 0;
+    let y = 0;
+
+    function run() {
+      const rect = btn.getBoundingClientRect();
+      const baseLeft = rect.left - x;
+      const baseTop = rect.top - y;
+
+      const margin = 12;
+      const minDx = Math.max(-(baseLeft - margin), -220);
+      const maxDx = Math.min(window.innerWidth - (baseLeft + rect.width) - margin, 220);
+      const minDy = Math.max(-(baseTop - margin), -180);
+      const maxDy = Math.min(window.innerHeight - (baseTop + rect.height) - margin, 180);
+
+      x = minDx + Math.random() * (maxDx - minDx);
+      y = minDy + Math.random() * (maxDy - minDy);
+      btn.style.transform = "translate(" + x + "px," + y + "px)";
+    }
+
+    btn.addEventListener("mouseenter", run);
+    btn.addEventListener("click", function (e) {
+      e.preventDefault();
+      run();
+    });
+    btn.addEventListener(
+      "touchstart",
+      function (e) {
+        e.preventDefault();
+        run();
+      },
+      { passive: false }
+    );
+  }
+
   if (q.type === "slider") {
     renderSlider();
+  } else if (q.type === "escape") {
+    renderEscape();
   } else {
     renderOptions();
   }

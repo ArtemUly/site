@@ -219,6 +219,35 @@ body {
   color: var(--ink-soft);
 }
 
+/* ---------- убегающая кнопка ---------- */
+.escape {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  position: relative;
+  min-height: 130px;
+}
+
+.escape__stay {
+  position: relative;
+  z-index: 2;
+}
+
+.escape__run {
+  position: relative;
+  z-index: 1;
+  color: var(--rose-deep);
+  background: transparent;
+  border: 2px solid rgba(196, 63, 109, 0.35);
+  transition: transform 0.22s ease;
+}
+
+.escape__run:hover {
+  background: rgba(224, 96, 138, 0.08);
+}
+
 /* ---------- кнопки ---------- */
 .btn {
   font-family: inherit;
