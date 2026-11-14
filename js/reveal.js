@@ -15,11 +15,20 @@
   const reveal = q.reveal || {};
 
   const img = document.getElementById("reveal-img");
+  const video = document.getElementById("reveal-video");
   const text = document.getElementById("reveal-text");
   const next = document.getElementById("next-btn");
 
-  if (reveal.photo) img.src = reveal.photo;
-  img.alt = "";
+  if (reveal.video) {
+    video.src = reveal.video;
+    video.hidden = false;
+    img.hidden = true;
+  } else {
+    if (reveal.photo) img.src = reveal.photo;
+    img.alt = "";
+    img.hidden = false;
+    video.hidden = true;
+  }
   text.textContent = reveal.text || "";
 
   const isLast = index + 1 >= questions.length;

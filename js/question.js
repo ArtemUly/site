@@ -29,6 +29,12 @@
     hoop: document.getElementById("hoop"),
     hoopRing: document.getElementById("hoop-ring"),
     ball: document.getElementById("ball"),
+    safeBlock: document.getElementById("safe-block"),
+    safeHints: document.getElementById("safe-hints"),
+    safeDevice: document.getElementById("safe-device"),
+    safeDisplay: document.getElementById("safe-display"),
+    safeKeys: document.getElementById("safe-keys"),
+    safeSurprise: document.getElementById("safe-surprise"),
     modal: document.getElementById("modal"),
     modalClose: document.getElementById("modal-close"),
   };
@@ -47,6 +53,7 @@
     els.sliderBlock.hidden = true;
     els.escapeBlock.hidden = true;
     els.gameBlock.hidden = true;
+    els.safeBlock.hidden = true;
   }
 
   /* ---------- слайдер ---------- */
@@ -224,12 +231,107 @@
     document.addEventListener("pointercancel", onUp);
   }
 
+  /* ---------- сейф ---------- */
+  function renderSafe() {
+    hideAll();
+    els.safeBlock.hidden = false;
+
+    const cfg = q.safe || {};
+    const code = String(cfg.code || "");
+    const hints = cfg.questions || [];
+    let entered = "";
+    let opened = false;
+
+    els.safeHints.innerHTML = "";
+    hints.forEach(function (text) {
+      const li = document.createElement("li");
+      li.className = "safe__hint";
+      li.textContent = text;
+      els.safeHints.appendChild(li);
+    });
+
+    els.safeSurprise.textContent = cfg.button || "Сюрприз";
+    els.safeSurprise.addEventListener("click", goNext);
+
+    function renderDisplay() {
+      let out = "";
+      for (let i = 0; i < code.length; i++) {
+        out += entered[i] != null ? entered[i] : "·";
+      }
+      els.safeDisplay.textContent = out;
+    }
+    renderDisplay();
+
+    function reset() {
+      entered = "";
+      renderDisplay();
+    }
+
+    function press(digit) {
+      if (opened || entered.length >= code.length) return;
+      entered += digit;
+      renderDisplay();
+      if (entered.length < code.length) return;
+
+      if (entered === code) {
+        opened = true;
+        els.safeBlock.classList.add("safe--open");
+        setTimeout(function () {
+          els.safeSurprise.hidden = false;
+        }, 700);
+      } else {
+        els.safeBlock.classList.add("safe--shake");
+        setTimeout(function () {
+          els.safeBlock.classList.remove("safe--shake");
+          reset();
+        }, 500);
+      }
+    }
+
+    function backspace() {
+      if (opened) return;
+      entered = entered.slice(0, -1);
+      renderDisplay();
+    }
+
+    els.safeKeys.innerHTML = "";
+    ["1", "2", "3", "4", "5", "6", "7", "8", "9", "", "0", "⌫"].forEach(
+      function (key) {
+        if (key === "") {
+          const gap = document.createElement("span");
+          gap.className = "safe__key safe__key--empty";
+          els.safeKeys.appendChild(gap);
+          return;
+        }
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "safe__key";
+        btn.textContent = key;
+        btn.addEventListener("click", function () {
+          if (key === "⌫") backspace();
+          else press(key);
+        });
+        els.safeKeys.appendChild(btn);
+      }
+    );
+
+    document.addEventListener("keydown", function (e) {
+      if (e.key >= "0" && e.key <= "9") press(e.key);
+      else if (e.key === "Backspace") {
+        e.preventDefault();
+        backspace();
+      }
+    });
+  }
+
   if (q.type === "slider") {
     renderSlider();
   } else if (q.type === "escape") {
     renderEscape();
   } else if (q.type === "basketball") {
     renderBasketball();
+  } else if (q.type === "safe") {
+    renderSafe();
   } else {
     renderOptions();
   }
