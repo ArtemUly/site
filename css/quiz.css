@@ -252,6 +252,132 @@ body {
   box-shadow: 0 20px 38px -12px rgba(196, 63, 109, 0.75);
 }
 
+/* ---------- забрось мяч в кольцо ---------- */
+.game {
+  position: relative;
+  width: 100%;
+  height: 380px;
+  margin-top: 6px;
+  border-radius: 22px;
+  border: 1px solid rgba(224, 96, 138, 0.18);
+  background:
+    radial-gradient(circle at 82% 16%, #fff6e9 0%, transparent 60%),
+    linear-gradient(160deg, #fff1f5 0%, #ffe7ef 100%);
+  overflow: hidden;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.hoop {
+  position: absolute;
+  top: 44px;
+  right: 48px;
+  width: 104px;
+  height: 104px;
+}
+
+.hoop__board {
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 88px;
+  height: 64px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 3px solid rgba(224, 96, 138, 0.35);
+  box-shadow: 0 10px 24px -12px rgba(95, 51, 80, 0.4);
+}
+
+.hoop__ring {
+  position: relative;
+  width: 104px;
+  height: 104px;
+  border-radius: 50%;
+  border: 11px solid #ef7d3f;
+  background: transparent;
+  box-shadow:
+    0 0 0 4px rgba(239, 125, 63, 0.2),
+    0 16px 30px -14px rgba(196, 63, 109, 0.5),
+    inset 0 0 22px rgba(239, 125, 63, 0.35);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.hoop--hot .hoop__ring {
+  border-color: var(--rose-deep);
+  box-shadow:
+    0 0 0 9px rgba(224, 96, 138, 0.28),
+    0 16px 30px -14px rgba(196, 63, 109, 0.6);
+}
+
+.ball {
+  position: absolute;
+  left: 22px;
+  bottom: 22px;
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  cursor: grab;
+  z-index: 3;
+  background: radial-gradient(circle at 32% 28%, #ffb066 0%, #f0873a 45%, #d9651f 100%);
+  box-shadow:
+    inset -6px -8px 16px rgba(150, 60, 10, 0.45),
+    inset 6px 8px 16px rgba(255, 200, 140, 0.5),
+    0 16px 26px -12px rgba(120, 55, 15, 0.6);
+  animation: ballBob 2.6s ease-in-out infinite;
+}
+
+.ball::before,
+.ball::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+}
+
+.ball::before {
+  border-top: 3px solid rgba(90, 40, 10, 0.5);
+  border-bottom: 3px solid rgba(90, 40, 10, 0.5);
+}
+
+.ball::after {
+  border-left: 3px solid rgba(90, 40, 10, 0.5);
+  border-right: 3px solid rgba(90, 40, 10, 0.5);
+}
+
+.ball--dragging {
+  cursor: grabbing;
+  z-index: 5;
+  animation: none;
+}
+
+.ball--in {
+  animation: ballPop 0.4s ease both;
+}
+
+@keyframes ballBob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes ballPop {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(0.72);
+  }
+  100% {
+    transform: scale(0.92);
+  }
+}
+
 /* ---------- кнопки ---------- */
 .btn {
   font-family: inherit;

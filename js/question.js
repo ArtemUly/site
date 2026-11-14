@@ -25,6 +25,10 @@
     escapeBlock: document.getElementById("escape-block"),
     escapeStay: document.getElementById("escape-stay"),
     escapeRun: document.getElementById("escape-run"),
+    gameBlock: document.getElementById("game-block"),
+    hoop: document.getElementById("hoop"),
+    hoopRing: document.getElementById("hoop-ring"),
+    ball: document.getElementById("ball"),
     modal: document.getElementById("modal"),
     modalClose: document.getElementById("modal-close"),
   };
@@ -42,6 +46,7 @@
     els.options.hidden = true;
     els.sliderBlock.hidden = true;
     els.escapeBlock.hidden = true;
+    els.gameBlock.hidden = true;
   }
 
   /* ---------- слайдер ---------- */
@@ -142,10 +147,89 @@
     );
   }
 
+  /* ---------- забрось мяч в кольцо ---------- */
+  function renderBasketball() {
+    hideAll();
+    els.gameBlock.hidden = false;
+
+    const ball = els.ball;
+    const ring = els.hoopRing;
+    const hoop = els.hoop;
+    const area = els.gameBlock;
+
+    let dragging = false;
+    let done = false;
+    let offsetX = 0;
+    let offsetY = 0;
+
+    function onDown(e) {
+      if (done) return;
+      ball.classList.add("ball--dragging");
+      const br = ball.getBoundingClientRect();
+      offsetX = e.clientX - br.left;
+      offsetY = e.clientY - br.top;
+      dragging = true;
+      e.preventDefault();
+    }
+
+    function onMove(e) {
+      if (!dragging || done) return;
+      const ar = area.getBoundingClientRect();
+      let left = e.clientX - offsetX - ar.left;
+      let top = e.clientY - offsetY - ar.top;
+      left = Math.max(0, Math.min(left, ar.width - ball.offsetWidth));
+      top = Math.max(0, Math.min(top, ar.height - ball.offsetHeight));
+      ball.style.left = left + "px";
+      ball.style.top = top + "px";
+      ball.style.bottom = "auto";
+      checkHit();
+    }
+
+    function onUp() {
+      if (!dragging) return;
+      dragging = false;
+      ball.classList.remove("ball--dragging");
+    }
+
+    function checkHit() {
+      if (done) return;
+      const b = ball.getBoundingClientRect();
+      const r = ring.getBoundingClientRect();
+      const dist = Math.hypot(
+        b.left + b.width / 2 - (r.left + r.width / 2),
+        b.top + b.height / 2 - (r.top + r.height / 2)
+      );
+      if (dist < r.width * 0.4) success();
+    }
+
+    function success() {
+      done = true;
+      dragging = false;
+      ball.classList.remove("ball--dragging");
+      ball.classList.add("ball--in");
+      hoop.classList.add("hoop--hot");
+
+      const ar = area.getBoundingClientRect();
+      const rr = ring.getBoundingClientRect();
+      ball.style.left = rr.left - ar.left + (rr.width - ball.offsetWidth) / 2 + "px";
+      ball.style.top = rr.top - ar.top + (rr.height - ball.offsetHeight) / 2 + "px";
+      ball.style.bottom = "auto";
+
+      setTimeout(goNext, 800);
+    }
+
+    ball.addEventListener("pointerdown", onDown);
+    document.addEventListener("pointermove", onMove);
+    document.addEventListener("pointerup", onUp);
+    document.addEventListener("pointercancel", onUp);
+  }
+
   if (q.type === "slider") {
     renderSlider();
   } else if (q.type === "escape") {
     renderEscape();
+  } else if (q.type === "basketball") {
+    renderBasketball();
   } else {
     renderOptions();
   }
