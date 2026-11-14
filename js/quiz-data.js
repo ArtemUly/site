@@ -20,7 +20,7 @@ window.QUIZ_CONFIG = {
       correct: 1,
       reveal: {
         photo: "assets/photos/bolnitsa.jpg",
-        text: "Плейсхолдер: здесь будет рассказ к фото. Пришли текст.",
+        text: "И даже в самые сложные моменты мы всегда рядышком.",
       },
     },
   ],
