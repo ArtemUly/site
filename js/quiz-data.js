@@ -19,8 +19,8 @@ window.QUIZ_CONFIG = {
       options: ["Велосипед", "Коляска", "Самосвал", "Лодка"],
       correct: 1,
       reveal: {
-        photo: "assets/photos/na-prieme.jpg",
-        text: "Плейсхолдер: здесь будет фото и рассказ. Пришли текст и выбери фото.",
+        photo: "assets/photos/bolnitsa.jpg",
+        text: "Плейсхолдер: здесь будет рассказ к фото. Пришли текст.",
       },
     },
   ],
