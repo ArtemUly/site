@@ -165,6 +165,12 @@ body {
   cursor: pointer;
 }
 
+.slider::-webkit-slider-runnable-track {
+  height: 14px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #ffe3ea 0%, #e0608a 100%);
+}
+
 .slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
