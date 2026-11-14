@@ -42,6 +42,63 @@ body {
 .stage {
   width: 100%;
   max-width: 620px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ---------- тема «звёздное небо» ---------- */
+.stars-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+body.theme-stars {
+  background:
+    radial-gradient(circle at 50% 120%, #2b2352 0%, #141033 45%, #05030f 100%);
+}
+
+body.theme-stars .card {
+  background: rgba(32, 27, 58, 0.72);
+  border-color: rgba(160, 150, 220, 0.28);
+  box-shadow: 0 28px 70px -24px rgba(0, 0, 0, 0.7);
+}
+
+body.theme-stars .story {
+  color: #f1ecff;
+}
+
+body.theme-stars .progress__bar {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+body.theme-stars .progress__label {
+  color: #cfc6f0;
+}
+
+body.theme-stars .option {
+  background: rgba(62, 55, 104, 0.5);
+  border-color: rgba(154, 142, 224, 0.3);
+  color: #ece7ff;
+}
+
+body.theme-stars .option:hover {
+  border-color: #b9a8ff;
+  background: rgba(78, 69, 128, 0.62);
+}
+
+body.theme-stars .option__mark {
+  background: rgba(154, 142, 224, 0.28);
+  color: #fff;
+}
+
+body.theme-stars .modal__box {
+  background: #241f42;
+}
+
+body.theme-stars .modal__text {
+  color: #ece7ff;
 }
 
 .card {

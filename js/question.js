@@ -44,6 +44,11 @@
     (((index + 1) / questions.length) * 100).toFixed(1) + "%";
   els.story.textContent = q.story;
 
+  if (q.bg === "stars") {
+    document.body.classList.add("theme-stars");
+    if (window.startStarfield) window.startStarfield();
+  }
+
   function goNext() {
     location.href = "reveal.html?q=" + (index + 1);
   }
