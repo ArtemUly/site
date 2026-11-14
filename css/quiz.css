@@ -609,6 +609,67 @@ body.theme-stars .modal__text {
   }
 }
 
+/* ---------- колесо «Поле чудес» ---------- */
+.wheel {
+  margin-top: 6px;
+}
+
+.wheel__stage {
+  position: relative;
+  width: min(80vw, 340px);
+  aspect-ratio: 1 / 1;
+  margin: 14px auto 4px;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.wheel__canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  filter: drop-shadow(0 22px 40px rgba(95, 51, 80, 0.35));
+}
+
+.wheel__pointer {
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-top: 28px solid var(--rose-deep);
+  z-index: 3;
+  filter: drop-shadow(0 4px 6px rgba(95, 51, 80, 0.4));
+}
+
+.wheel__hub {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 86px;
+  height: 86px;
+  border-radius: 50%;
+  background: #fff;
+  border: 5px solid #f2c14e;
+  color: var(--rose-deep);
+  font-weight: 700;
+  font-size: 15px;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  z-index: 4;
+  box-shadow: 0 10px 22px -10px rgba(95, 51, 80, 0.6);
+}
+
+.wheel--spinning .wheel__hub {
+  color: var(--ink-soft);
+}
+
 /* ---------- кнопки ---------- */
 .btn {
   font-family: inherit;

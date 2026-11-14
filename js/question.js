@@ -37,6 +37,9 @@
     safeDisplay: document.getElementById("safe-display"),
     safeKeys: document.getElementById("safe-keys"),
     safeSurprise: document.getElementById("safe-surprise"),
+    wheelBlock: document.getElementById("wheel-block"),
+    wheelStage: document.getElementById("wheel-stage"),
+    wheelCanvas: document.getElementById("wheel-canvas"),
     modal: document.getElementById("modal"),
     modalClose: document.getElementById("modal-close"),
   };
@@ -67,6 +70,7 @@
     els.escapeBlock.hidden = true;
     els.gameBlock.hidden = true;
     els.safeBlock.hidden = true;
+    els.wheelBlock.hidden = true;
   }
 
   /* ---------- слайдер ---------- */
@@ -337,6 +341,90 @@
     });
   }
 
+  /* ---------- колесо «Поле чудес» ---------- */
+  function renderWheel() {
+    hideAll();
+    els.wheelBlock.hidden = false;
+
+    const cfg = q.wheel || {};
+    const names = cfg.names || [];
+    const target = cfg.target || names[0];
+    const targetIndex = Math.max(0, names.indexOf(target));
+    const n = names.length;
+
+    const canvas = els.wheelCanvas;
+    const ctx = canvas.getContext("2d");
+    const size = canvas.width;
+    const cx = size / 2;
+    const cy = size / 2;
+    const radius = size / 2 - 12;
+    const seg = (Math.PI * 2) / n;
+    const palette = [
+      "#e0608a",
+      "#f0a93a",
+      "#5aa9e6",
+      "#6fbf73",
+      "#a679d2",
+      "#ef7d3f",
+      "#f2c14e",
+      "#4bbfa8",
+    ];
+
+    ctx.clearRect(0, 0, size, size);
+    for (let i = 0; i < n; i++) {
+      const a0 = i * seg;
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.arc(cx, cy, radius, a0, a0 + seg);
+      ctx.closePath();
+      ctx.fillStyle = palette[i % palette.length];
+      ctx.fill();
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.55)";
+      ctx.stroke();
+
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.rotate(a0 + seg / 2);
+      ctx.fillStyle = "#fff";
+      ctx.font = "700 " + Math.round(size * 0.05) + "px Comfortaa, sans-serif";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(names[i], radius * 0.63, 0);
+      ctx.restore();
+    }
+
+    ctx.beginPath();
+    ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+    ctx.lineWidth = 16;
+    ctx.strokeStyle = "#f2c14e";
+    ctx.stroke();
+
+    let spinning = false;
+    let rotation = 0;
+
+    function spin() {
+      if (spinning) return;
+      spinning = true;
+      els.wheelStage.classList.add("wheel--spinning");
+
+      const midDeg = (targetIndex + 0.5) * (360 / n);
+      const targetRotation = 270 - midDeg + 360 * 6;
+
+      canvas.style.transition = "transform 7s cubic-bezier(0.17, 0.67, 0.16, 0.99)";
+      void canvas.offsetWidth;
+      rotation += targetRotation;
+      canvas.style.transform = "rotate(" + rotation + "deg)";
+
+      setTimeout(goNext, 7400);
+    }
+
+    els.wheelStage.addEventListener("click", spin);
+    document.addEventListener("keydown", function (e) {
+      if (e.key === " " || e.key === "Enter") spin();
+    });
+  }
+
   if (q.type === "slider") {
     renderSlider();
   } else if (q.type === "escape") {
@@ -345,6 +433,8 @@
     renderBasketball();
   } else if (q.type === "safe") {
     renderSafe();
+  } else if (q.type === "wheel") {
+    renderWheel();
   } else {
     renderOptions();
   }
