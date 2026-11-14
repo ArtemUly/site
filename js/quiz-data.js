@@ -169,7 +169,7 @@ window.QUIZ_CONFIG = {
     },
     {
       type: "wipe",
-      story: "Проведи мышкой по стеклу и сотри налёт.",
+      story: "Пора прибраться!",
       reveal: {
         photo: "assets/photos/poyavlenie.jpg",
         text: "Я прошу тебя, как можно чаще повторяй это себе!",
