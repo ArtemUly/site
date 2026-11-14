@@ -1,3 +1,7 @@
+[hidden] {
+  display: none !important;
+}
+
 :root {
   --blush: #ffe3ea;
   --rose: #e0608a;
