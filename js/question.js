@@ -71,6 +71,7 @@
   /* ---------- варианты ответа ---------- */
   function renderOptions() {
     hideAll();
+    els.options.hidden = false;
     q.options.forEach(function (text, i) {
       const btn = document.createElement("button");
       btn.className = "option";
