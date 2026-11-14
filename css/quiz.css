@@ -755,6 +755,163 @@ body.theme-stars .modal__text {
   transition: width 0.15s linear;
 }
 
+/* ---------- собери бутерброд ---------- */
+.burger {
+  margin-top: 6px;
+}
+
+.burger__plate {
+  position: relative;
+  height: 320px;
+  border-radius: 22px;
+  border: 1px dashed rgba(224, 96, 138, 0.35);
+  background: linear-gradient(180deg, #ffffff 0%, #fff6ec 100%);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 16px;
+  overflow: hidden;
+}
+
+.burger__stack {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+}
+
+.layer {
+  flex: 0 0 auto;
+  width: 210px;
+  animation: dropIn 0.3s ease both;
+}
+
+.layer--bun-bottom {
+  height: 34px;
+  border-radius: 8px 8px 20px 20px;
+  background: linear-gradient(180deg, #e2ac70 0%, #c9873f 100%);
+}
+
+.layer--cutlet {
+  width: 224px;
+  height: 26px;
+  border-radius: 12px;
+  background: linear-gradient(180deg, #7a4a26 0%, #573319 100%);
+}
+
+.layer--lettuce {
+  width: 234px;
+  height: 20px;
+  border-radius: 10px;
+  background: linear-gradient(180deg, #8fd35a 0%, #5fae34 100%);
+}
+
+.layer--cheese {
+  width: 216px;
+  height: 18px;
+  border-radius: 6px;
+  background: linear-gradient(180deg, #ffd95e 0%, #f2b91e 100%);
+}
+
+.layer--top {
+  height: 50px;
+  border-radius: 70px 70px 12px 12px;
+  background: linear-gradient(180deg, #e7b375 0%, #cf9440 100%);
+}
+
+@keyframes dropIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.burger__plate.is-wrong {
+  animation: burgerShake 0.4s ease;
+}
+
+@keyframes burgerShake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-8px);
+  }
+  40% {
+    transform: translateX(7px);
+  }
+  60% {
+    transform: translateX(-5px);
+  }
+  80% {
+    transform: translateX(3px);
+  }
+}
+
+.burger__items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.ing {
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+  background: #fff;
+  border: 2px solid var(--blush);
+  border-radius: 14px;
+  padding: 10px 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: transform 0.12s ease, border-color 0.2s ease, opacity 0.2s ease;
+}
+
+.ing:hover {
+  border-color: var(--rose);
+  transform: translateY(-1px);
+}
+
+.ing:active {
+  transform: scale(0.96);
+}
+
+.ing__emoji {
+  font-size: 18px;
+}
+
+.ing--used {
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+.ing--wrong {
+  animation: ingShake 0.35s ease;
+  border-color: var(--rose-deep);
+}
+
+@keyframes ingShake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  30% {
+    transform: translateX(-5px);
+  }
+  60% {
+    transform: translateX(5px);
+  }
+}
+
 /* ---------- кнопки ---------- */
 .btn {
   font-family: inherit;

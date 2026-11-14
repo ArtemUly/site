@@ -46,6 +46,10 @@
     wipeContent: document.getElementById("wipe-content"),
     wipeBtn: document.getElementById("wipe-btn"),
     wipeFill: document.getElementById("wipe-fill"),
+    burgerBlock: document.getElementById("burger-block"),
+    burgerPlate: document.getElementById("burger-plate"),
+    burgerStack: document.getElementById("burger-stack"),
+    burgerItems: document.getElementById("burger-items"),
     modal: document.getElementById("modal"),
     modalClose: document.getElementById("modal-close"),
   };
@@ -78,6 +82,7 @@
     els.safeBlock.hidden = true;
     els.wheelBlock.hidden = true;
     els.wipeBlock.hidden = true;
+    els.burgerBlock.hidden = true;
   }
 
   /* ---------- слайдер ---------- */
@@ -569,6 +574,74 @@
     resize();
   }
 
+  /* ---------- собери бутерброд ---------- */
+  const BURGER_INGREDIENTS = {
+    "bun-bottom": { label: "Нижняя булочка", emoji: "🥯" },
+    cutlet: { label: "Котлета", emoji: "🥩" },
+    lettuce: { label: "Салат", emoji: "🥬" },
+    cheese: { label: "Сыр", emoji: "🧀" },
+    top: { label: "Верхняя булочка", emoji: "🍔" },
+  };
+
+  function renderBurger() {
+    hideAll();
+    els.burgerBlock.hidden = false;
+
+    const cfg = q.burger || {};
+    const order = cfg.order || ["bun-bottom", "cutlet", "lettuce", "cheese", "top"];
+    let step = 0;
+    let done = false;
+
+    els.burgerStack.innerHTML = "";
+    els.burgerItems.innerHTML = "";
+
+    const keys = order.slice();
+    for (let i = keys.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      const tmp = keys[i];
+      keys[i] = keys[j];
+      keys[j] = tmp;
+    }
+
+    keys.forEach(function (key) {
+      const info = BURGER_INGREDIENTS[key] || { label: key, emoji: "" };
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "ing";
+      btn.innerHTML =
+        '<span class="ing__emoji">' + info.emoji + "</span><span>" + info.label + "</span>";
+      btn.addEventListener("click", function () {
+        pick(key, btn);
+      });
+      els.burgerItems.appendChild(btn);
+    });
+
+    function pick(key, btn) {
+      if (done) return;
+      if (key === order[step]) {
+        const layer = document.createElement("div");
+        layer.className = "layer layer--" + key;
+        els.burgerStack.appendChild(layer);
+        btn.classList.add("ing--used");
+        step++;
+        if (step === order.length) {
+          done = true;
+          setTimeout(goNext, 900);
+        }
+      } else {
+        els.burgerPlate.classList.remove("is-wrong");
+        btn.classList.remove("ing--wrong");
+        void els.burgerPlate.offsetWidth;
+        els.burgerPlate.classList.add("is-wrong");
+        btn.classList.add("ing--wrong");
+        setTimeout(function () {
+          els.burgerPlate.classList.remove("is-wrong");
+          btn.classList.remove("ing--wrong");
+        }, 450);
+      }
+    }
+  }
+
   if (q.type === "slider") {
     renderSlider();
   } else if (q.type === "escape") {
@@ -581,6 +654,8 @@
     renderWheel();
   } else if (q.type === "wipe") {
     renderWipe();
+  } else if (q.type === "burger") {
+    renderBurger();
   } else {
     renderOptions();
   }
