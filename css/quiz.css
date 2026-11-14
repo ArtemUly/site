@@ -154,6 +154,21 @@ body.theme-stars .modal__text {
 }
 
 /* ---------- вопрос ---------- */
+.question-photo {
+  border-radius: 18px;
+  overflow: hidden;
+  margin-bottom: 22px;
+  box-shadow: 0 16px 36px -18px rgba(95, 51, 80, 0.5);
+}
+
+.question-photo img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 46vh;
+  object-fit: cover;
+}
+
 .story {
   font-family: "Playfair Display", serif;
   font-size: clamp(21px, 4.5vw, 29px);

@@ -18,6 +18,8 @@
     fill: document.getElementById("progress-fill"),
     label: document.getElementById("progress-label"),
     story: document.getElementById("story"),
+    questionPhoto: document.getElementById("question-photo"),
+    questionPhotoImg: document.getElementById("question-photo-img"),
     options: document.getElementById("options"),
     sliderBlock: document.getElementById("slider-block"),
     slider: document.getElementById("slider"),
@@ -43,6 +45,12 @@
   els.fill.style.width =
     (((index + 1) / questions.length) * 100).toFixed(1) + "%";
   els.story.textContent = q.story;
+
+  if (q.photo) {
+    els.questionPhotoImg.src = q.photo;
+    els.questionPhotoImg.alt = "";
+    els.questionPhoto.hidden = false;
+  }
 
   if (q.bg === "stars") {
     document.body.classList.add("theme-stars");
