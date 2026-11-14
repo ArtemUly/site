@@ -1,0 +1,256 @@
+:root {
+  --blush: #ffe3ea;
+  --rose: #e0608a;
+  --rose-deep: #c43f6d;
+  --plum: #5f3350;
+  --ink: #4a2f42;
+  --ink-soft: #7c6473;
+  --white: #ffffff;
+  --shadow: 0 24px 60px -20px rgba(95, 51, 80, 0.28);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  font-family: "Comfortaa", system-ui, sans-serif;
+  color: var(--ink);
+  background:
+    radial-gradient(1100px 700px at 15% -10%, #ffe9f0 0%, transparent 55%),
+    radial-gradient(1000px 800px at 110% 110%, #fff2df 0%, transparent 50%),
+    linear-gradient(160deg, #fff7f2 0%, #ffeef4 100%);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  -webkit-font-smoothing: antialiased;
+}
+
+.stage {
+  width: 100%;
+  max-width: 620px;
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  border-radius: 28px;
+  box-shadow: var(--shadow);
+  padding: 44px 36px;
+  animation: rise 0.5s ease both;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---------- прогресс ---------- */
+.progress {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 28px;
+}
+
+.progress__bar {
+  flex: 1;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--blush);
+  overflow: hidden;
+}
+
+.progress__fill {
+  height: 100%;
+  width: 0;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--rose), #e5a94a);
+  transition: width 0.45s ease;
+}
+
+.progress__label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+
+/* ---------- вопрос ---------- */
+.story {
+  font-family: "Playfair Display", serif;
+  font-size: clamp(21px, 4.5vw, 29px);
+  line-height: 1.4;
+  color: var(--plum);
+  margin-bottom: 26px;
+}
+
+.options {
+  display: grid;
+  gap: 12px;
+}
+
+.option {
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 500;
+  text-align: left;
+  color: var(--ink);
+  background: var(--white);
+  border: 2px solid var(--blush);
+  border-radius: 18px;
+  padding: 16px 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: border-color 0.2s ease, transform 0.15s ease;
+}
+
+.option:hover {
+  border-color: var(--rose);
+  transform: translateY(-1px);
+}
+
+.option__mark {
+  flex: 0 0 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--blush);
+  color: var(--rose-deep);
+  display: grid;
+  place-items: center;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* ---------- кнопки ---------- */
+.btn {
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 700;
+  border: none;
+  border-radius: 999px;
+  padding: 16px 40px;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  transition: transform 0.15s ease, box-shadow 0.2s ease;
+}
+
+.btn--primary {
+  color: #fff;
+  background: linear-gradient(135deg, var(--rose) 0%, var(--rose-deep) 100%);
+  box-shadow: 0 14px 30px -10px rgba(196, 63, 109, 0.7);
+}
+
+.btn--primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 20px 38px -12px rgba(196, 63, 109, 0.75);
+}
+
+.btn--primary:active {
+  transform: scale(0.98);
+}
+
+/* ---------- модальное окно ---------- */
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(95, 51, 80, 0.45);
+  backdrop-filter: blur(4px);
+  animation: fade 0.2s ease both;
+}
+
+.modal[hidden] {
+  display: none;
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.modal__box {
+  background: #fff;
+  border-radius: 24px;
+  padding: 34px 30px;
+  max-width: 420px;
+  text-align: center;
+  box-shadow: 0 30px 70px -20px rgba(95, 51, 80, 0.5);
+  animation: rise 0.3s ease both;
+}
+
+.modal__emoji {
+  font-size: 40px;
+  margin-bottom: 12px;
+}
+
+.modal__text {
+  font-size: 17px;
+  line-height: 1.55;
+  color: var(--plum);
+  margin-bottom: 24px;
+}
+
+/* ---------- страница «фото + текст» ---------- */
+.card--reveal {
+  text-align: center;
+}
+
+.reveal-photo {
+  border-radius: 20px;
+  overflow: hidden;
+  margin-bottom: 22px;
+  box-shadow: 0 18px 40px -18px rgba(95, 51, 80, 0.5);
+}
+
+.reveal-photo img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 62vh;
+  object-fit: cover;
+}
+
+.reveal-text {
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--plum);
+  margin-bottom: 26px;
+}
+
+@media (max-width: 480px) {
+  body {
+    padding: 14px;
+  }
+
+  .card {
+    padding: 30px 22px;
+    border-radius: 22px;
+  }
+}
