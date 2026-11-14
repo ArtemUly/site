@@ -4,7 +4,7 @@
 (function () {
   "use strict";
 
-  const cfg = window.QUIZ_CONFIG;
+  const cfg = window.QUIZ_CONFIG || {};
   const questions = cfg.questions || [];
 
   const els = {
@@ -39,22 +39,25 @@
 
   /* ---------- вспомогательное ---------- */
   function showScreen(name) {
-    [els.intro, els.quiz, els.result].forEach((s) =>
-      s.classList.remove("screen--active")
-    );
-    ({ intro: els.intro, quiz: els.quiz, result: els.result }[name]).classList.add(
-      "screen--active"
-    );
+    [els.intro, els.quiz, els.result].forEach(function (s) {
+      if (s) s.classList.remove("screen--active");
+    });
+    const target = { intro: els.intro, quiz: els.quiz, result: els.result }[name];
+    if (target) target.classList.add("screen--active");
   }
 
-  /* ---------- приветствие ---------- */
+  function setText(el, value) {
+    if (el && value) el.textContent = value;
+  }
+
+  /* ---------- приветствие (если есть) ---------- */
   function initIntro() {
     const i = cfg.intro || {};
-    if (i.eyebrow) els.eyebrow.textContent = i.eyebrow;
-    if (i.title) els.title.textContent = i.title;
-    if (i.subtitle) els.subtitle.textContent = i.subtitle;
-    if (i.hint) els.hint.textContent = i.hint;
-    if (i.button) els.startBtn.textContent = i.button;
+    setText(els.eyebrow, i.eyebrow);
+    setText(els.title, i.title);
+    setText(els.subtitle, i.subtitle);
+    setText(els.hint, i.hint);
+    setText(els.startBtn, i.button);
   }
 
   /* ---------- викторина ---------- */
@@ -80,7 +83,7 @@
         text +
         "</span>";
       btn.addEventListener("click", function () {
-        selectAnswer(index, btn);
+        selectAnswer(index);
       });
       els.options.appendChild(btn);
     });
@@ -92,7 +95,7 @@
       current === questions.length - 1 ? "Узнать результат" : "Далее";
   }
 
-  function selectAnswer(index, btn) {
+  function selectAnswer(index) {
     if (locked) return;
     locked = true;
 
@@ -136,7 +139,9 @@
   function pickResult(percent) {
     const r = cfg.results || {};
     const list = [r.high, r.mid, r.low].filter(Boolean);
-    list.sort((a, b) => b.min - a.min);
+    list.sort(function (a, b) {
+      return b.min - a.min;
+    });
     for (let i = 0; i < list.length; i++) {
       if (percent >= list[i].min) return list[i];
     }
@@ -151,8 +156,10 @@
 
     els.scoreNumber.textContent = score;
     els.scoreTotal.textContent = "из " + questions.length;
-    els.resultTitle.textContent = res.title;
-    els.resultText.textContent = res.text;
+    if (res) {
+      els.resultTitle.textContent = res.title;
+      els.resultText.textContent = res.text;
+    }
 
     els.scoreRing.style.strokeDasharray = RING_LEN;
     els.scoreRing.style.strokeDashoffset = RING_LEN;
@@ -161,7 +168,8 @@
     requestAnimationFrame(function () {
       requestAnimationFrame(function () {
         els.scoreRing.style.strokeDashoffset = (
-          RING_LEN * (1 - percent / 100)
+          RING_LEN *
+          (1 - percent / 100)
         ).toFixed(1);
       });
     });
@@ -172,7 +180,12 @@
   function restart() {
     current = 0;
     score = 0;
-    showScreen("intro");
+    if (els.intro) {
+      showScreen("intro");
+    } else {
+      showScreen("quiz");
+      renderQuestion();
+    }
   }
 
   /* ---------- поделиться ---------- */
@@ -259,17 +272,31 @@
     }
   }
 
-  /* ---------- события ---------- */
-  els.startBtn.addEventListener("click", function () {
+  /* ---------- запуск ---------- */
+  function startQuiz() {
     current = 0;
     score = 0;
     showScreen("quiz");
     renderQuestion();
-  });
-  els.nextBtn.addEventListener("click", nextQuestion);
-  els.restartBtn.addEventListener("click", restart);
-  els.shareBtn.addEventListener("click", share);
+  }
+
+  if (els.startBtn) {
+    els.startBtn.addEventListener("click", startQuiz);
+  }
+  if (els.nextBtn) {
+    els.nextBtn.addEventListener("click", nextQuestion);
+  }
+  if (els.restartBtn) {
+    els.restartBtn.addEventListener("click", restart);
+  }
+  if (els.shareBtn) {
+    els.shareBtn.addEventListener("click", share);
+  }
 
   initIntro();
   initPetals();
+
+  if (document.body.dataset.autostart === "true") {
+    startQuiz();
+  }
 })();
