@@ -140,6 +140,72 @@ body {
   font-weight: 700;
 }
 
+/* ---------- слайдер ---------- */
+.slider-block {
+  margin-top: 6px;
+}
+
+.slider-value {
+  font-family: "Playfair Display", serif;
+  font-size: 56px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--rose-deep);
+  margin-bottom: 18px;
+}
+
+.slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 14px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #ffe3ea 0%, #e0608a 100%);
+  outline: none;
+  cursor: pointer;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #fff;
+  border: 4px solid var(--rose-deep);
+  box-shadow: 0 6px 16px -4px rgba(196, 63, 109, 0.8);
+  cursor: grab;
+  transition: transform 0.15s ease;
+}
+
+.slider::-webkit-slider-thumb:active {
+  cursor: grabbing;
+  transform: scale(1.12);
+}
+
+.slider::-moz-range-thumb {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #fff;
+  border: 4px solid var(--rose-deep);
+  box-shadow: 0 6px 16px -4px rgba(196, 63, 109, 0.8);
+  cursor: grab;
+}
+
+.slider:disabled {
+  cursor: default;
+}
+
+.slider-ends {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+
 /* ---------- кнопки ---------- */
 .btn {
   font-family: inherit;

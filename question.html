@@ -24,7 +24,26 @@
 
       <p class="story" id="story"></p>
 
+      <!-- вариант 1: обычные варианты ответа -->
       <div class="options" id="options"></div>
+
+      <!-- вариант 2: слайдер -->
+      <div class="slider-block" id="slider-block" hidden>
+        <div class="slider-value" id="slider-value">0</div>
+        <input
+          class="slider"
+          id="slider"
+          type="range"
+          min="0"
+          max="100"
+          value="0"
+          step="1"
+        />
+        <div class="slider-ends">
+          <span>0</span>
+          <span>100</span>
+        </div>
+      </div>
     </div>
   </main>
 
