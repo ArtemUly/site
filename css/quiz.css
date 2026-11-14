@@ -670,6 +670,91 @@ body.theme-stars .modal__text {
   color: var(--ink-soft);
 }
 
+/* ---------- запотевшее стекло ---------- */
+.wipe {
+  margin-top: 6px;
+}
+
+.wipe__stage {
+  width: 100%;
+  max-width: 360px;
+  margin: 0 auto;
+}
+
+.wipe__window {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 5 / 4;
+  border-radius: 20px;
+  overflow: hidden;
+  background: linear-gradient(160deg, #cfe8ff 0%, #eaf4ff 45%, #dff0e6 100%);
+  box-shadow:
+    inset 0 0 0 8px rgba(255, 255, 255, 0.65),
+    0 20px 44px -20px rgba(95, 51, 80, 0.5);
+}
+
+.wipe__content {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  padding: 24px;
+  text-align: center;
+  animation: rise 0.5s ease both;
+}
+
+.wipe__msg {
+  font-family: "Playfair Display", serif;
+  font-size: clamp(19px, 4.5vw, 25px);
+  line-height: 1.35;
+  color: var(--plum);
+}
+
+.wipe__canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  cursor: grab;
+  touch-action: none;
+}
+
+.wipe__canvas:active {
+  cursor: grabbing;
+}
+
+.wipe__canvas--done {
+  pointer-events: none;
+  animation: wipeFade 0.5s ease both;
+}
+
+@keyframes wipeFade {
+  to {
+    opacity: 0;
+  }
+}
+
+.wipe__bar {
+  height: 10px;
+  border-radius: 999px;
+  background: var(--blush);
+  overflow: hidden;
+  margin-top: 16px;
+}
+
+.wipe__fill {
+  height: 100%;
+  width: 0;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--rose), #e5a94a);
+  transition: width 0.15s linear;
+}
+
 /* ---------- кнопки ---------- */
 .btn {
   font-family: inherit;

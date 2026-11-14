@@ -40,6 +40,12 @@
     wheelBlock: document.getElementById("wheel-block"),
     wheelStage: document.getElementById("wheel-stage"),
     wheelCanvas: document.getElementById("wheel-canvas"),
+    wipeBlock: document.getElementById("wipe-block"),
+    wipeWindow: document.getElementById("wipe-window"),
+    wipeCanvas: document.getElementById("wipe-canvas"),
+    wipeContent: document.getElementById("wipe-content"),
+    wipeBtn: document.getElementById("wipe-btn"),
+    wipeFill: document.getElementById("wipe-fill"),
     modal: document.getElementById("modal"),
     modalClose: document.getElementById("modal-close"),
   };
@@ -71,6 +77,7 @@
     els.gameBlock.hidden = true;
     els.safeBlock.hidden = true;
     els.wheelBlock.hidden = true;
+    els.wipeBlock.hidden = true;
   }
 
   /* ---------- слайдер ---------- */
@@ -425,6 +432,143 @@
     });
   }
 
+  /* ---------- запотевшее стекло ---------- */
+  function renderWipe() {
+    hideAll();
+    els.wipeBlock.hidden = false;
+
+    const canvas = els.wipeCanvas;
+    const win = els.wipeWindow;
+    const ctx = canvas.getContext("2d");
+
+    let brush = 30;
+    let drawing = false;
+    let done = false;
+    let moves = 0;
+
+    function fillFrost() {
+      ctx.globalCompositeOperation = "source-over";
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      const g = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+      g.addColorStop(0, "#f3f7fa");
+      g.addColorStop(0.5, "#e7eef3");
+      g.addColorStop(1, "#dfe8ee");
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      const dots = (canvas.width * canvas.height) / 150;
+      for (let i = 0; i < dots; i++) {
+        ctx.fillStyle = "rgba(255,255,255," + (Math.random() * 0.5 + 0.2).toFixed(2) + ")";
+        ctx.beginPath();
+        ctx.arc(
+          Math.random() * canvas.width,
+          Math.random() * canvas.height,
+          Math.random() * 1.6 + 0.4,
+          0,
+          Math.PI * 2
+        );
+        ctx.fill();
+      }
+
+      ctx.fillStyle = "rgba(120, 140, 160, 0.32)";
+      ctx.font = "600 15px Comfortaa, sans-serif";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText("сотри налёт", canvas.width / 2, canvas.height / 2);
+    }
+
+    function resize() {
+      const rect = win.getBoundingClientRect();
+      canvas.width = Math.max(1, Math.round(rect.width));
+      canvas.height = Math.max(1, Math.round(rect.height));
+      brush = Math.max(26, canvas.width * 0.11);
+      done = false;
+      els.wipeContent.hidden = true;
+      els.wipeFill.style.width = "0%";
+      canvas.classList.remove("wipe__canvas--done");
+      fillFrost();
+    }
+
+    function pos(e) {
+      const rect = canvas.getBoundingClientRect();
+      return {
+        x: (e.clientX - rect.left) * (canvas.width / rect.width),
+        y: (e.clientY - rect.top) * (canvas.height / rect.height),
+      };
+    }
+
+    function erase(x, y) {
+      ctx.globalCompositeOperation = "destination-out";
+      ctx.beginPath();
+      ctx.arc(x, y, brush, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.globalCompositeOperation = "source-over";
+    }
+
+    function check() {
+      if (done) return;
+      const data = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+      let clear = 0;
+      let total = 0;
+      for (let i = 3; i < data.length; i += 20) {
+        total++;
+        if (data[i] < 40) clear++;
+      }
+      const ratio = total ? clear / total : 0;
+      els.wipeFill.style.width = Math.min(100, ratio * 100).toFixed(0) + "%";
+      if (ratio > 0.95) finish();
+    }
+
+    function finish() {
+      done = true;
+      drawing = false;
+      ctx.globalCompositeOperation = "destination-out";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.globalCompositeOperation = "source-over";
+      canvas.classList.add("wipe__canvas--done");
+      els.wipeFill.style.width = "100%";
+      els.wipeContent.hidden = false;
+    }
+
+    function onDown(e) {
+      if (done) return;
+      drawing = true;
+      const p = pos(e);
+      erase(p.x, p.y);
+      e.preventDefault();
+    }
+
+    function onMove(e) {
+      if (!drawing || done) return;
+      const p = pos(e);
+      erase(p.x, p.y);
+      moves++;
+      if (moves % 5 === 0) check();
+      e.preventDefault();
+    }
+
+    function onUp() {
+      if (!drawing) return;
+      drawing = false;
+      check();
+    }
+
+    els.wipeBtn.addEventListener("click", goNext);
+    canvas.addEventListener("pointerdown", onDown);
+    document.addEventListener("pointermove", onMove);
+    document.addEventListener("pointerup", onUp);
+    document.addEventListener("pointercancel", onUp);
+
+    let resizeTimer = null;
+    window.addEventListener("resize", function () {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(resize, 200);
+    });
+
+    resize();
+  }
+
   if (q.type === "slider") {
     renderSlider();
   } else if (q.type === "escape") {
@@ -435,6 +579,8 @@
     renderSafe();
   } else if (q.type === "wheel") {
     renderWheel();
+  } else if (q.type === "wipe") {
+    renderWipe();
   } else {
     renderOptions();
   }
