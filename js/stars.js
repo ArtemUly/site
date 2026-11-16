@@ -9,6 +9,7 @@ window.startStarfield = function () {
   document.body.appendChild(canvas);
 
   const ctx = canvas.getContext("2d");
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   let stars = [];
   let w = 0;
   let h = 0;
@@ -38,6 +39,7 @@ window.startStarfield = function () {
     canvas.style.width = window.innerWidth + "px";
     canvas.style.height = window.innerHeight + "px";
     build();
+    if (reduce) draw();
   }
 
   function draw() {
@@ -45,7 +47,7 @@ window.startStarfield = function () {
     tick += 1;
     for (let i = 0; i < stars.length; i++) {
       const s = stars[i];
-      const twinkle = s.base + Math.sin(s.phase + tick * s.speed) * 0.4;
+      const twinkle = reduce ? s.base : s.base + Math.sin(s.phase + tick * s.speed) * 0.4;
       const alpha = Math.max(0.08, Math.min(1, twinkle));
       ctx.beginPath();
       ctx.fillStyle =
@@ -53,10 +55,10 @@ window.startStarfield = function () {
       ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
       ctx.fill();
     }
-    requestAnimationFrame(draw);
+    if (!reduce) requestAnimationFrame(draw);
   }
 
   window.addEventListener("resize", resize);
   resize();
-  draw();
+  if (!reduce) draw();
 };

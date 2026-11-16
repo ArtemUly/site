@@ -1,18 +1,10 @@
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-html,
-body {
-  height: 100%;
-}
-
 body {
   font-family: "Comfortaa", system-ui, sans-serif;
-  color: #4a2f42;
-  background: #ffffff;
+  color: var(--ink);
+  background:
+    radial-gradient(1100px 700px at 15% -10%, #ffe9f0 0%, transparent 55%),
+    radial-gradient(1000px 800px at 110% 110%, #fff2df 0%, transparent 50%),
+    linear-gradient(160deg, #fff7f2 0%, #ffeef4 100%);
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
 }
@@ -67,24 +59,31 @@ body {
   font-weight: 700;
   line-height: 1.05;
   margin-bottom: 22px;
-  background: linear-gradient(120deg, #c43f6d 0%, #e0608a 45%, #e5a94a 100%);
+  background: linear-gradient(
+    120deg,
+    var(--rose-deep) 0%,
+    var(--rose) 45%,
+    var(--gold) 100%
+  );
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 .message {
+  max-width: 58ch;
+  margin: 0 auto 20px;
   font-size: clamp(15px, 2.1vw, 18px);
   line-height: 1.75;
-  color: #5f3350;
-  margin-bottom: 22px;
+  color: var(--plum);
 }
 
 .question {
   font-family: "Playfair Display", serif;
   font-style: italic;
   font-size: clamp(22px, 4vw, 32px);
-  color: #c43f6d;
+  color: var(--rose-deep);
+  margin-top: 10px;
   margin-bottom: 30px;
 }
 
@@ -92,15 +91,16 @@ body {
 .btn-yes {
   display: inline-block;
   font-family: inherit;
-  font-size: 19px;
+  font-size: 18px;
   font-weight: 700;
   text-decoration: none;
   color: #fff;
-  padding: 17px 64px;
-  border-radius: 999px;
-  background: linear-gradient(135deg, #e0608a 0%, #c43f6d 100%);
+  padding: 17px 60px;
+  border-radius: var(--radius-pill);
+  background: linear-gradient(135deg, var(--rose) 0%, var(--rose-deep) 100%);
   box-shadow: 0 18px 40px -12px rgba(196, 63, 109, 0.75);
-  transition: transform 0.16s ease, box-shadow 0.22s ease;
+  transition: transform var(--dur-fast) var(--ease-standard),
+    box-shadow 0.22s var(--ease-standard);
 }
 
 .btn-yes:hover {
@@ -109,7 +109,7 @@ body {
 }
 
 .btn-yes:active {
-  transform: scale(0.97);
+  transform: scale(0.98);
 }
 
 @media (max-width: 480px) {

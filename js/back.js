@@ -31,8 +31,8 @@
   const link = document.createElement("a");
   link.className = "back-link";
   link.href = prev;
-  link.setAttribute("aria-label", "Предыдущий вопрос");
+  link.setAttribute("aria-label", "Назад");
   link.innerHTML =
-    '<span class="back-link__arrow" aria-hidden="true">←</span><span>Предыдущий вопрос</span>';
+    '<span class="back-link__arrow" aria-hidden="true">←</span><span>Назад</span>';
   document.body.appendChild(link);
 })();

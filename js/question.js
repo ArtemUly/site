@@ -58,6 +58,7 @@
   els.fill.style.width =
     (((index + 1) / questions.length) * 100).toFixed(1) + "%";
   els.story.textContent = q.story;
+  if ((q.story || "").length > 120) els.story.classList.add("story--long");
 
   if (q.photo) {
     els.questionPhotoImg.src = q.photo;
@@ -104,7 +105,8 @@
       els.sliderValue.textContent = value;
       if (value >= target) {
         els.slider.disabled = true;
-        setTimeout(goNext, 250);
+        els.sliderValue.classList.add("slider-value--done");
+        setTimeout(goNext, 450);
       }
     });
   }
@@ -124,8 +126,15 @@
         text +
         "</span>";
       btn.addEventListener("click", function () {
-        if (i === q.correct) goNext();
-        else openModal();
+        if (i === q.correct) {
+          btn.classList.add("option--correct");
+          Array.prototype.forEach.call(els.options.children, function (el) {
+            el.disabled = true;
+          });
+          setTimeout(goNext, 450);
+        } else {
+          openModal();
+        }
       });
       els.options.appendChild(btn);
     });
@@ -367,6 +376,7 @@
     const canvas = els.wheelCanvas;
     const ctx = canvas.getContext("2d");
     const size = canvas.width;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const cx = size / 2;
     const cy = size / 2;
     const radius = size / 2 - 12;
@@ -399,7 +409,8 @@
       ctx.translate(cx, cy);
       ctx.rotate(a0 + seg / 2);
       ctx.fillStyle = "#fff";
-      ctx.font = "700 " + Math.round(size * 0.05) + "px Comfortaa, sans-serif";
+      const fontSize = Math.round(size * (n >= 10 ? 0.042 : 0.05));
+      ctx.font = "700 " + fontSize + "px Comfortaa, sans-serif";
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
       ctx.fillText(names[i], radius * 0.63, 0);
@@ -423,12 +434,14 @@
       const midDeg = (targetIndex + 0.5) * (360 / n);
       const targetRotation = 270 - midDeg + 360 * 6;
 
-      canvas.style.transition = "transform 7s cubic-bezier(0.17, 0.67, 0.16, 0.99)";
+      const spinMs = reduce ? 500 : 7000;
+      canvas.style.transition =
+        "transform " + spinMs / 1000 + "s cubic-bezier(0.17, 0.67, 0.16, 0.99)";
       void canvas.offsetWidth;
       rotation += targetRotation;
       canvas.style.transform = "rotate(" + rotation + "deg)";
 
-      setTimeout(goNext, 7400);
+      setTimeout(goNext, spinMs + 400);
     }
 
     els.wheelStage.addEventListener("click", spin);
@@ -476,11 +489,28 @@
         ctx.fill();
       }
 
-      ctx.fillStyle = "rgba(120, 140, 160, 0.32)";
-      ctx.font = "600 15px Comfortaa, sans-serif";
+      const label = "сотри налёт";
+      const fpx = Math.max(15, Math.round(canvas.width * 0.05));
+      ctx.font = "700 " + fpx + "px Comfortaa, sans-serif";
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
-      ctx.fillText("сотри налёт", canvas.width / 2, canvas.height / 2);
+      const tw = ctx.measureText(label).width;
+      const padX = fpx * 0.95;
+      const padY = fpx * 0.62;
+      const mx = canvas.width / 2;
+      const my = canvas.height / 2;
+      const rw = tw + padX * 2;
+      const rh = fpx + padY * 2;
+      ctx.beginPath();
+      if (ctx.roundRect) {
+        ctx.roundRect(mx - rw / 2, my - rh / 2, rw, rh, rh / 2);
+      } else {
+        ctx.rect(mx - rw / 2, my - rh / 2, rw, rh);
+      }
+      ctx.fillStyle = "rgba(95, 51, 80, 0.6)";
+      ctx.fill();
+      ctx.fillStyle = "#ffffff";
+      ctx.fillText(label, mx, my);
     }
 
     function resize() {
