@@ -457,8 +457,8 @@
 
       const g = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
       g.addColorStop(0, "#ffffff");
-      g.addColorStop(0.5, "#f8fcff");
-      g.addColorStop(1, "#eef6fd");
+      g.addColorStop(0.5, "#ffffff");
+      g.addColorStop(1, "#fcfdff");
       ctx.fillStyle = g;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
