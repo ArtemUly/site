@@ -14,6 +14,9 @@
   const q = questions[index];
   const reveal = q.reveal || {};
 
+  const chapter = Math.min(4, Math.floor((index / questions.length) * 4) + 1);
+  document.body.classList.add("chapter-" + chapter);
+
   const img = document.getElementById("reveal-img");
   const video = document.getElementById("reveal-video");
   const text = document.getElementById("reveal-text");
@@ -28,6 +31,8 @@
     img.alt = "";
     img.hidden = false;
     video.hidden = true;
+    const frame = document.querySelector(".reveal-photo");
+    if (frame) frame.classList.add("polaroid");
   }
   text.textContent = reveal.text || "";
 

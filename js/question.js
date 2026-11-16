@@ -71,8 +71,17 @@
     if (window.startStarfield) window.startStarfield();
   }
 
+  const chapter = Math.min(4, Math.floor((index / questions.length) * 4) + 1);
+  document.body.classList.add("chapter-" + chapter);
+
   function goNext() {
     location.href = "reveal.html?q=" + (index + 1);
+  }
+
+  function succeed(delay) {
+    const card = document.querySelector(".card");
+    if (card) card.classList.add("card--success");
+    setTimeout(goNext, delay || 450);
   }
 
   function hideAll() {
@@ -106,7 +115,7 @@
       if (value >= target) {
         els.slider.disabled = true;
         els.sliderValue.classList.add("slider-value--done");
-        setTimeout(goNext, 450);
+        succeed(450);
       }
     });
   }
@@ -131,7 +140,7 @@
           Array.prototype.forEach.call(els.options.children, function (el) {
             el.disabled = true;
           });
-          setTimeout(goNext, 450);
+          succeed(450);
         } else {
           openModal();
         }
@@ -150,7 +159,9 @@
     buttons.forEach(function (btn, i) {
       btn.textContent = q.options[i];
       if (i === q.correct) {
-        btn.addEventListener("click", goNext);
+        btn.addEventListener("click", function () {
+          succeed(350);
+        });
       } else {
         makeEscape(btn);
       }
@@ -260,7 +271,7 @@
       ball.style.top = rr.top - ar.top + (rr.height - ball.offsetHeight) / 2 + "px";
       ball.style.bottom = "auto";
 
-      setTimeout(goNext, 800);
+      succeed(700);
     }
 
     ball.addEventListener("pointerdown", onDown);
@@ -289,7 +300,9 @@
     });
 
     els.safeSurprise.textContent = cfg.button || "Сюрприз";
-    els.safeSurprise.addEventListener("click", goNext);
+    els.safeSurprise.addEventListener("click", function () {
+      succeed(350);
+    });
 
     function renderDisplay() {
       let out = "";
@@ -441,7 +454,9 @@
       rotation += targetRotation;
       canvas.style.transform = "rotate(" + rotation + "deg)";
 
-      setTimeout(goNext, spinMs + 400);
+      setTimeout(function () {
+        succeed(700);
+      }, spinMs);
     }
 
     els.wheelStage.addEventListener("click", spin);
@@ -589,7 +604,9 @@
       check();
     }
 
-    els.wipeBtn.addEventListener("click", goNext);
+    els.wipeBtn.addEventListener("click", function () {
+      succeed(350);
+    });
     canvas.addEventListener("pointerdown", onDown);
     document.addEventListener("pointermove", onMove);
     document.addEventListener("pointerup", onUp);
@@ -656,7 +673,7 @@
         step++;
         if (step === order.length) {
           done = true;
-          setTimeout(goNext, 900);
+          succeed(700);
         }
       } else {
         els.burgerPlate.classList.remove("is-wrong");
