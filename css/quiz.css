@@ -941,6 +941,54 @@ body.theme-stars .modal__text {
   transform: scale(0.98);
 }
 
+/* ---------- кнопка «Предыдущий вопрос» ---------- */
+body.has-back {
+  padding-top: 72px;
+}
+
+.back-link {
+  position: fixed;
+  top: 18px;
+  left: 18px;
+  z-index: 40;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--plum);
+  text-decoration: none;
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid rgba(95, 51, 80, 0.12);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 10px 26px -14px rgba(95, 51, 80, 0.5);
+  transition: transform 0.15s ease, box-shadow 0.2s ease;
+}
+
+.back-link:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 30px -14px rgba(95, 51, 80, 0.6);
+}
+
+.back-link:active {
+  transform: scale(0.97);
+}
+
+.back-link__arrow {
+  font-size: 16px;
+  line-height: 1;
+}
+
+body.theme-stars .back-link {
+  color: #ece7ff;
+  background: rgba(40, 34, 74, 0.78);
+  border-color: rgba(154, 142, 224, 0.32);
+  box-shadow: 0 10px 26px -14px rgba(0, 0, 0, 0.7);
+}
+
 /* ---------- модальное окно ---------- */
 .modal {
   position: fixed;
@@ -1050,6 +1098,17 @@ body.theme-stars .modal__text {
 @media (max-width: 480px) {
   body {
     padding: 14px;
+  }
+
+  body.has-back {
+    padding-top: 66px;
+  }
+
+  .back-link {
+    top: 12px;
+    left: 12px;
+    padding: 8px 14px;
+    font-size: 13px;
   }
 
   .card {
